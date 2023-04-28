@@ -1,8 +1,8 @@
-# *.qa.twdps.io
+# *.prod_us-east_1.cohortscdi.five
 
 # define a provider in the account where this subdomain will be managed
 provider "aws" {
-  alias  = "subdomain_qa_twdps_io"
+  alias  = "subdomain_prod_us_east_1_cohortscdi_five"
   region = "us-east-1"
   assume_role {
     role_arn     = "arn:aws:iam::${var.prod_account_id}:role/${var.assume_role}"
@@ -11,17 +11,17 @@ provider "aws" {
 }
 
 # create a route53 hosted zone for the subdomain in the account defined by the provider above
-module "subdomain_qa_twdps_io" {
+module "subdomain_prod_us_east_1_cohortscdi_five" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.0.0"
   create  = true
 
   providers = {
-    aws = aws.subdomain_qa_twdps_io
+    aws = aws.subdomain_prod_us_east_1_cohortscdi_five
   }
 
   zones = {
-    "qa.${local.domain_twdps_io}" = {
+    "prod-us-east-1.${local.domain_cohortscdi_five}" = {
       tags = {
         cluster = "prod"
       }
@@ -34,27 +34,27 @@ module "subdomain_qa_twdps_io" {
 }
 
 # Create a zone delegation in the top level domain for this subdomain
-module "subdomain_zone_delegation_qa_twdps_io" {
+module "subdomain_zone_delegation_prod_us_east_1_cohortscdi_five" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "2.0.0"
   create  = true
 
   providers = {
-    aws = aws.domain_twdps_io
+    aws = aws.domain_cohortscdi_five
   }
 
   private_zone = false
-  zone_name = local.domain_twdps_io
+  zone_name = local.domain_cohortscdi_five
   records = [
     {
-      name            = "qa"
+      name            = "prod-us-east-1"
       type            = "NS"
       ttl             = 172800
-      zone_id         = data.aws_route53_zone.zone_id_twdps_io.id
+      zone_id         = data.aws_route53_zone.zone_id_cohortscdi_five.id
       allow_overwrite = true
-      records         = lookup(module.subdomain_qa_twdps_io.route53_zone_name_servers,"qa.${local.domain_twdps_io}")
+      records         = lookup(module.subdomain_prod_us_east_1_cohortscdi_five.route53_zone_name_servers,"prod-us-east-1.${local.domain_cohortscdi_five}")
     }
   ]
 
-  depends_on = [module.subdomain_qa_twdps_io]
+  depends_on = [module.subdomain_prod_us_east_1_cohortscdi_five]
 }
