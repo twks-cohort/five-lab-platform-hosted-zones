@@ -6,7 +6,7 @@ provider "aws" {
   region = "us-east-1"
   assume_role {
     role_arn     = "arn:aws:iam::${var.prod_account_id}:role/${var.assume_role}"
-    session_name = "lab-platform-hosted-zones"
+    session_name = "five-lab-platform-hosted-zones"
   }
 }
 
@@ -23,13 +23,13 @@ module "subdomain_dev_cohortscdi_five" {
   zones = {
     "dev.${local.domain_cohortscdi_five}" = {
       tags = {
-        cluster = "prod"
+        cluster = "nonprod"
       }
     }
   }
 
   tags = {
-    pipeline = "lab-platform-hosted-zones"
+    pipeline = "five-lab-platform-hosted-zones"
   }
 }
 
