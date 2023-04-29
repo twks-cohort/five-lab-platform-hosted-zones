@@ -5,7 +5,7 @@ provider "aws" {
   alias  = "subdomain_prod_cohortscdi_five"
   region = "us-east-1"
   assume_role {
-    role_arn     = "arn:aws:iam::${var.prod_account_id}:role/${var.assume_role}"
+    role_arn     = "arn:aws:iam::${var.nonprod_account_id}:role/${var.assume_role}"
     session_name = "lab-platform-hosted-zones"
   }
 }

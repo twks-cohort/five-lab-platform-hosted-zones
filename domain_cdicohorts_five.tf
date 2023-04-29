@@ -1,5 +1,5 @@
 locals {
-  domain_twdps_digital = "cohortscdi-five.com"
+  domain_cohortscdi_five = "cohortscdi-five.com."
 }
 
 provider "aws" {
